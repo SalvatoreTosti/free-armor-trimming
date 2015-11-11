@@ -6,7 +6,9 @@ from clickPlayer import clickPlayer
 # #klogger.run()
 
 cPlayer = clickPlayer()
-cPlayer.processNextEvent(3,100,100)
+cPlayer.addEvent([5.5,[100,100]])
+cPlayer.play()
+#cPlayer.processNextEvent(3,100,100)
 
 logger = clickLogger()
 logger.run()
