@@ -2,7 +2,7 @@ from pymouse import PyMouseEvent
 import time
 
 class clickLogger(PyMouseEvent):
-    startTime = 0
+    startTime = time.time()
     lastEventTime = startTime
     coordinateList = []
     def __init__(self):
