@@ -1,6 +1,7 @@
 import time
 from collections import deque
 from pymouse import PyMouse
+import pickle
 
 class clickPlayer(PyMouse):
     eventQueue = deque()
@@ -31,3 +32,9 @@ class clickPlayer(PyMouse):
     def play(self):
         while self.eventQueue:
             self.getNextEvent()
+
+    def readCoordinateList(self):
+        with open('test.txt','rb') as f:
+            rawList = pickle.load(f)
+            for item in rawList:
+                self.addEvent(item)

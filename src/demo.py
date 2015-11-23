@@ -7,8 +7,9 @@ from clickPlayer import clickPlayer
 
 cPlayer = clickPlayer()
 #cPlayer.addEvent([5.5,[100,100]])
-#cPlayer.play()
+cPlayer.readCoordinateList()
+cPlayer.play()
 #cPlayer.processNextEvent(3,100,100)
 
-logger = clickLogger()
-logger.run()
+#logger = clickLogger()
+#logger.run()
