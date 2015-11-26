@@ -6,10 +6,12 @@ class clickLogger(PyMouseEvent):
     startTime = time.time()
     lastEventTime = startTime
     coordinateList = []
-    def __init__(self):
+
+    def __init__(self,wLocation):
         PyMouseEvent.__init__(self)
         startTime = time.time()
         lastEventTime = startTime
+        self.writeLocation = wLocation
 
     def elapsedTime(self):
         elapsedTime = time.time() - self.lastEventTime
@@ -29,13 +31,16 @@ class clickLogger(PyMouseEvent):
         time = self.elapsedTime()
         coordinatesAndTime = [time, coordinates]
         self.coordinateList.append(coordinatesAndTime)
-        #self.printCoordinateList()
-        if time > 2.0:
-            self.writeCoordinateList()
+        #self.writeCoordinateList()
 
-    def readCoordinateList(self):
-        with open('test.txt', 'wb') as f:
-            pickle.dump(self.getCoordinateList(),f)
+    def writeCoordinateList(self):
+        #print self.writeLocation
+        if self.writeLocation:
+            with open(self.writeLocation, 'wb') as f:
+                pickle.dump(self.getCoordinateList(),f)
+        else:
+            with open('test.txt', 'wb') as f:
+                pickle.dump(self.getCoordinateList(),f)
         #with open('test.txt', 'w') as f:
             #for coordinate in self.getCoordinateList():
                 #print coordinate
