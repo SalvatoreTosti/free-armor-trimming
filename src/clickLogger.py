@@ -31,7 +31,7 @@ class clickLogger(PyMouseEvent):
         time = self.elapsedTime()
         coordinatesAndTime = [time, coordinates]
         self.coordinateList.append(coordinatesAndTime)
-        #self.writeCoordinateList()
+        self.writeCoordinateList()
 
     def writeCoordinateList(self):
         #print self.writeLocation
