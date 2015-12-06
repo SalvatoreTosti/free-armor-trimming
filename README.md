@@ -1,6 +1,6 @@
 # Free Armor Trimming
 _Free mouse tracking and playback_
-----
+
 ## Overview
 Free Armor Trimming provides the ability to record mouse clicks and then play them back in their original sequence.
 
