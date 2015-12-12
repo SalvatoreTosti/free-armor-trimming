@@ -3,7 +3,7 @@ from collections import deque
 from pymouse import PyMouse
 import pickle
 
-class clickPlayer(PyMouse):
+class ClickPlayer(PyMouse):
     #eventQueue = deque()
     def __init__(self,rLocation):
         PyMouse.__init__(self)

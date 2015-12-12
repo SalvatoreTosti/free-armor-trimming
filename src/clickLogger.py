@@ -2,7 +2,7 @@ from pymouse import PyMouseEvent
 import time
 import pickle
 
-class clickLogger(PyMouseEvent):
+class ClickLogger(PyMouseEvent):
     startTime = time.time()
     lastEventTime = startTime
     coordinateList = []
