@@ -16,23 +16,34 @@ from clickPlayer import ClickPlayer
 class RootWidget(Widget):
     def __init__(self,**kwargs):
         super(RootWidget,self).__init__(**kwargs)
-        self.painter = MyPaintWidget(size_hint=(.5, 1))
-        self.painter.update(0)
-        self.slider = Slider(min=0,max=10,value=0,size_hint=(.5, 1))
-        self.slider.bind(value=self.update_canvas)
-        self.add_widget(self.painter)
-        self.add_widget(self.slider)
 
-    def get_layout(self):
-        self.layout = BoxLayout(padding=10,orientation='vertical')
+        self.size = Window.size
+        print self.size
+        self.painter = MyPaintWidget()
+        self.painter.update(0)
+        self.slider = Slider(min=0,max=10,value=0)
+        self.slider.bind(value=self.update_canvas)
+        self.layout = BoxLayout(orientation='vertical')
+        self.layout.size = self.size
         self.layout.add_widget(self.painter)
         self.layout.add_widget(self.slider)
+        self.add_widget(self.layout)
+        #self.layout.add_widget(Button(text="kk",size_hint=(.5,1)))
+        #self.layout.add_widget(Button(text="okk",size_hint=(.5,1)))
+        #self.add_widget(self.layout)
+
+    def get_layout(self):
         return self.layout
 
     def clear_canvas(self, obj):
         self.painter.canvas.clear()
     def update_canvas(self,obj,value):
         self.painter.update(value)
+
+    def get_painter(self):
+        return self.painter
+    def get_slider(self):
+        return self.slider
 
 
 class MyPaintWidget(Widget):
@@ -65,6 +76,7 @@ class MyPaintWidget(Widget):
 
 class MyPaintApp(App):
     def build(self):
+
         root = RootWidget()
         return root
 
