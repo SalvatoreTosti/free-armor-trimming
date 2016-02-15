@@ -16,21 +16,34 @@ from clickPlayer import ClickPlayer
 class RootWidget(Widget):
     def __init__(self,**kwargs):
         super(RootWidget,self).__init__(**kwargs)
-
         self.size = Window.size
-        print self.size
-        self.painter = MyPaintWidget()
-        self.painter.update(0)
-        self.slider = Slider(min=0,max=10,value=0)
-        self.slider.bind(value=self.update_canvas)
+        # self.painter_proprtion_h = 1
+        # self.painter_proprtion_v = .7
+        # self.slider_proprtion_h = 1
+        # self.slider_proprtion_v = .7
+
+        painter = MyPaintWidget()
+        painter.size = Window.size
+
+        #painter.update(0)
+        self.painter = BackgroundWrapper(painter,size_hint=(1,.7))
+        self.painter.widget.update(0)
+
+        # self.painter = MyPaintWidget(size_hint=(1,.7))
+        # self.painter.update(0)
+        # self.slider = MySliderWidget(min=0,max=10,value=0,size_hint=(1,.3))
+        # self.slider.bind(value=self.update_canvas)
         self.layout = BoxLayout(orientation='vertical')
         self.layout.size = self.size
+        # self.layout.size = self.size
         self.layout.add_widget(self.painter)
-        self.layout.add_widget(self.slider)
+
+        self.layout.add_widget(Button(text="kk",size_hint=(1,.3)))
+        #print self.painter.width
+        #print self.painter.height
+        # self.layout.add_widget(self.slider)
+        #
         self.add_widget(self.layout)
-        #self.layout.add_widget(Button(text="kk",size_hint=(.5,1)))
-        #self.layout.add_widget(Button(text="okk",size_hint=(.5,1)))
-        #self.add_widget(self.layout)
 
     def get_layout(self):
         return self.layout
@@ -73,6 +86,36 @@ class MyPaintWidget(Widget):
         for num in range(1,10):
             eventQueue.append([num,num,num])
         return eventQueue
+
+class BackgroundWrapper(Widget):
+    def __init__(self,widget,**kwargs):
+        super(BackgroundWrapper,self).__init__(**kwargs)
+        self.widget = widget
+        size_x = self.size_hint[0]
+        size_y = self.size_hint[1]
+        window_x = Window.size[0]
+        window_y = Window.size[1]
+
+        self.background = BackgroundWidget(
+            height=widget.height*size_y,
+            width=widget.width*size_x,
+            pos_x=window_x*(1-size_x),
+            pos_y=window_y*(1-size_y))
+
+        self.background.width = widget.width
+        self.background.height = widget.height
+        self.add_widget(self.background)
+        self.add_widget(self.widget)
+
+
+class BackgroundWidget(Widget):
+    def __init__(self,pos_x,pos_y,**kwargs):
+        super(BackgroundWidget,self).__init__(**kwargs)
+        with self.canvas:
+            Color(1, .5, .2, 1)  # set the colour to orange
+            self.rect = Rectangle(
+                size=(self.width,self.height),
+                pos=(pos_x,pos_y))
 
 class MyPaintApp(App):
     def build(self):
