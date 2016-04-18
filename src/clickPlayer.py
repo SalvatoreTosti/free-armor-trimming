@@ -1,47 +1,70 @@
 import time
+from numbers import Number
 from collections import deque
 from pymouse import PyMouse
 import pickle
 
 class ClickPlayer(PyMouse):
-    #eventQueue = deque()
-    def __init__(self,rLocation):
+    def __init__(self,readLocation):
         PyMouse.__init__(self)
-        self.readLocation = rLocation
-        self.eventQueue = deque()
+        self._readLocation = readLocation
+        self._eventQueue = deque()
+
+    @property
+    def readLocation(self):
+        """Location of file containing series of mouse click events."""
+        return self._readLocation
+
+    @readLocation.setter
+    def readLocation(self,value):
+        self._readLocation = value
+
+    @property
+    def eventQueue(self):
+        """Queue of mouse click events."""
+        return self._eventQueue
+
+    @eventQueue.setter
+    def eventQueue(self,value):
+        self._eventQueue = value
 
     def click(self, x, y, button=1, n=1):
         PyMouse.click(self,x,y,button,n)
 
     def unpackEvent(self,event):
-        time = event[0]
-        print event[1]
-        coordinates = event[1]
-        x = coordinates[0]
-        y = coordinates[1]
-        return time,x,y
+        if event:
+            time = event[0]
+            coordinates = event[1]
+            x = coordinates[0]
+            y = coordinates[1]
+            assert isinstance(time,Number), "time is non-numeric, %r" % time
+            assert isinstance(x,Number), "x is non-numeric, %r" % x
+            assert isinstance(y,Number), "y is non-numeric, %r" % y
+            return time,x,y
+        else:
+            return None
 
     def processEvent(self, waitTime, x, y):
         time.sleep(waitTime)
         self.click(x,y)
 
     def getNextEvent(self):
-        if self.eventQueue:
-            event = self.eventQueue.popleft()
+        if self._eventQueue:
+            event = self._eventQueue.popleft()
             time,x,y = self.unpackEvent(event)
             self.processEvent(time,x,y)
 
     def addEvent(self, event):
-        self.eventQueue.append(event)
+        self._eventQueue.append(event)
 
     def play(self):
         self.readCoordinateList()
-        while self.eventQueue:
+        while self._eventQueue:
             self.getNextEvent()
 
     def readCoordinateList(self):
-        if self.readLocation:
-            with open(self.readLocation,'rb') as f:
+        if self._readLocation:
+            with open(self._readLocation,'rb') as f:
                 rawList = pickle.load(f)
                 for item in rawList:
                     self.addEvent(item)
