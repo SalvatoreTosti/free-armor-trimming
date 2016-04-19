@@ -33,16 +33,36 @@ class ClickPlayer(PyMouse):
 
     def unpackEvent(self,event):
         if event:
-            time = event[0]
-            coordinates = event[1]
-            x = coordinates[0]
-            y = coordinates[1]
-            assert isinstance(time,Number), "time is non-numeric, %r" % time
-            assert isinstance(x,Number), "x is non-numeric, %r" % x
-            assert isinstance(y,Number), "y is non-numeric, %r" % y
-            return time,x,y
+            if isinstance(event,dict):
+                return self.unpackEventDict(event)
+            elif isinstance(event,list):
+                return self.unpackEventList(event)
+            else:
+                return self.unpackEventList(event)
         else:
             return None
+
+    def unpackEventDict(self, event):
+        time = event['time']
+        x = event['x']
+        y = event['y']
+        assert isinstance(time,Number), "time is non-numeric, %r" % time
+        assert isinstance(x,Number), "x is non-numeric, %r" % x
+        assert isinstance(y,Number), "y is non-numeric, %r" % y
+        return time,x,y
+
+    def unpackEventList(self, event):
+        time = event[0]
+        coordinates = event[1]
+        x = coordinates[0]
+        y = coordinates[1]
+        assert isinstance(time,Number), "time is non-numeric, %r" % time
+        assert isinstance(x,Number), "x is non-numeric, %r" % x
+        assert isinstance(y,Number), "y is non-numeric, %r" % y
+        return time,x,y
+
+
+
 
     def processEvent(self, waitTime, x, y):
         time.sleep(waitTime)
