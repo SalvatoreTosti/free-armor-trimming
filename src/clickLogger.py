@@ -16,7 +16,7 @@ class ClickLogger(PyMouseEvent):
         return self._writeLocation
 
     @writeLocation.setter
-    def writeLocation(self,value):
+    def writeLocation(self, value):
         self._writeLocation = value
 
     @property
@@ -35,7 +35,7 @@ class ClickLogger(PyMouseEvent):
         return self._coordinateList
 
     @coordinateList.setter
-    def coordinateList(self,value):
+    def coordinateList(self, value):
         self._coordinateList = value
 
     def elapsedTime(self):
@@ -48,7 +48,7 @@ class ClickLogger(PyMouseEvent):
             print item
         print ""
 
-    def click(self,x,y,button,press):
+    def click(self, x, y, button, press):
         coordinates = [x,y]
         time = self.elapsedTime()
         coordinatesAndTime = [time, coordinates]

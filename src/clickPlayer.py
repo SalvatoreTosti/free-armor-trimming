@@ -5,10 +5,11 @@ from pymouse import PyMouse
 import pickle
 
 class ClickPlayer(PyMouse):
-    def __init__(self,readLocation):
+    def __init__(self, readLocation):
         PyMouse.__init__(self)
         self._readLocation = readLocation
         self._eventQueue = deque()
+        self.readCoordinateList()
 
     @property
     def readLocation(self):
@@ -16,7 +17,7 @@ class ClickPlayer(PyMouse):
         return self._readLocation
 
     @readLocation.setter
-    def readLocation(self,value):
+    def readLocation(self, value):
         self._readLocation = value
 
     @property
@@ -25,13 +26,13 @@ class ClickPlayer(PyMouse):
         return self._eventQueue
 
     @eventQueue.setter
-    def eventQueue(self,value):
+    def eventQueue(self, value):
         self._eventQueue = value
 
     def click(self, x, y, button=1, n=1):
         PyMouse.click(self,x,y,button,n)
 
-    def unpackEvent(self,event):
+    def unpackEvent(self, event):
         if event:
             if isinstance(event,dict):
                 return self.unpackEventDict(event)
@@ -60,9 +61,6 @@ class ClickPlayer(PyMouse):
         assert isinstance(x,Number), "x is non-numeric, %r" % x
         assert isinstance(y,Number), "y is non-numeric, %r" % y
         return time,x,y
-
-
-
 
     def processEvent(self, waitTime, x, y):
         time.sleep(waitTime)
@@ -93,3 +91,8 @@ class ClickPlayer(PyMouse):
                 rawList = pickle.load(f)
                 for item in rawList:
                     self.addEvent(item)
+
+    def printCoordinateList(self):
+        clickList = list(self._eventQueue)
+        for click in clickList:
+            print click
