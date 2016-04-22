@@ -11,32 +11,26 @@ class FAT(object):
 
     def main(self):
         parser = argparse.ArgumentParser(description='Command line interface for clickLogger and clickPlayer')
-        parser.add_argument("--log", type=str, help="activate mouse click logging mode.")
-        parser.add_argument("--play", type=str, help="active mouse click playback mode.")
-
+        group = parser.add_mutually_exclusive_group(required = True)
+        group.add_argument("--log", type=str, help="activate mouse click logging mode.")
+        group.add_argument("--edit", type=str, help="edit mouse click file.")
+        group.add_argument("--play", type=str, help="active mouse click playback mode.")
         args = parser.parse_args()
 
         if args.log:
-            logging = True
-        else:
-            logging = False
-
-        if args.play:
-            playback = True
-        else:
-            playback = False
-
-        if logging and playback:
-            print "Only one mode can be active at a time."
-            return
-        elif logging:
             self.initClickLogger(args.log)
-        elif playback:
+        elif args.play:
             if not os.path.isfile(str(os.getcwd()+ "/"+args.play)):
                 print "Invalid file selected."
                 return
             else:
                 self.initClickPlayer(args.play)
+        elif args.edit:
+            if not os.path.isfile(str(os.getcwd()+ "/"+args.play)):
+                print "Invalid file selected."
+                return
+            else:
+                print "edit mode"
 
     def initClickLogger(self, args):
         clickLogger = ClickLogger(args)
