@@ -82,10 +82,14 @@ class ClickPlayer(PyMouse):
 
     def readCoordinateList(self):
         if self._readLocation:
-            with open(self._readLocation,'rb') as f:
-                rawList = pickle.load(f)
-                for item in rawList:
-                    self.addEvent(item)
+            try:
+                with open(self._readLocation,'rb') as f:
+                    rawList = pickle.load(f)
+                    for item in rawList:
+                        self.addEvent(item)
+            except EOFError:
+                print str("Attempted to read invalid file: " + self._readLocation)
+
         else:
             with open('test.txt','rb') as f:
                 rawList = pickle.load(f)

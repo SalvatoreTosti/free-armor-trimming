@@ -1,7 +1,9 @@
 #Command line interface for clickLogger and clickPlayer classes.
 from clickLogger import ClickLogger
 from clickPlayer import ClickPlayer
+
 import argparse
+import os
 
 class FAT(object):
     def __init__(self):
@@ -30,7 +32,11 @@ class FAT(object):
         elif logging:
             self.initClickLogger(args.log)
         elif playback:
-            self.initClickPlayer(args.play)
+            if not os.path.isfile(str(os.getcwd()+ "/"+args.play)):
+                print "Invalid file selected."
+                return
+            else:
+                self.initClickPlayer(args.play)
 
     def initClickLogger(self, args):
         clickLogger = ClickLogger(args)
