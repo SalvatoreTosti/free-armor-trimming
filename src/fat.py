@@ -3,25 +3,42 @@ from clickLogger import ClickLogger
 from clickPlayer import ClickPlayer
 import argparse
 
-parser = argparse.ArgumentParser(description='Command line interface for clickLogger and clickPlayer')
-parser.add_argument("log")
-parser.add_argument("play")
-parser.add_argument("filename")
+class FAT(object):
+    def __init__(self):
+        pass
 
-args = parser.parse_args()
-print args
+    def main(self):
+        parser = argparse.ArgumentParser(description='Command line interface for clickLogger and clickPlayer')
+        parser.add_argument("--log", type=str, help="activate mouse click logging mode.")
+        parser.add_argument("--play", type=str, help="active mouse click playback mode.")
 
-loggingActive = False
-playbackActive = False
-filename = ""
-if args.log == "t":
-    loggingActive = True
-elif args.play == "t":
-    playbackActive = True
-else:
-    loggingActive = True
-    playbackActive = (not loggingActive)
+        args = parser.parse_args()
 
-#logger = ClickLogger("test.txt")
-logger = ClickLogger(args.filename)
-player = ClickPlayer(args.filename)
+        if args.log:
+            logging = True
+        else:
+            logging = False
+
+        if args.play:
+            playback = True
+        else:
+            playback = False
+
+        if logging and playback:
+            print "Only one mode can be active at a time."
+            return
+        elif logging:
+            self.initClickLogger(args.log)
+        elif playback:
+            self.initClickPlayer(args.play)
+
+    def initClickLogger(self, args):
+        clickLogger = ClickLogger(args)
+        clickLogger.run()
+
+    def initClickPlayer(self, args):
+        clickPlayer = ClickPlayer(args)
+        clickPlayer.printCoordinateList()
+
+if __name__ == '__main__':
+    FAT().main()
