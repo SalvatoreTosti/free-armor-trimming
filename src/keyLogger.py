@@ -79,7 +79,7 @@ class KeyLogger(PyKeyboardEvent):
         self._startTime = time.time()
         self._lastEventTime = self._startTime
         self._writeLocation = wLocation
-        self._keyPressList = []
+        self._keyEventList = []
 
     @property
     def writeLocation(self):
@@ -101,13 +101,13 @@ class KeyLogger(PyKeyboardEvent):
         return self._startTime
 
     @property
-    def keyPressList(self):
+    def keyEventList(self):
         """List of x and y coordiantes for mouse clicks."""
-        return self._keyPressList
+        return self._keyEventList
 
-    @keyPressList.setter
-    def keyPressList(self, value):
-        self._keyPressList = value
+    @keyEventList.setter
+    def keyEventList(self, value):
+        self._keyEventList = value
 
     def elapsedTime(self):
         elapsedTime = time.time() - self._lastEventTime
@@ -116,11 +116,12 @@ class KeyLogger(PyKeyboardEvent):
 
     def stop(self):
         self.state = False #set listener loop to end
+        self._writeKeyEventList()
 
     def _logEvent(self,key,eventType):
         time = self.elapsedTime()
-        keyAndTime = [time,key,eventType]
-        self._keyPressList.append(keyAndTime)
+        keyAndTime = [time,key_code_translate_table[key],eventType]
+        self._keyEventList.append(keyAndTime)
 
     def key_press(self,key):
         if(self.state == True): #only accept inputs if loop is running
@@ -133,8 +134,15 @@ class KeyLogger(PyKeyboardEvent):
     def key_release(self,key):
         if(self.state == True): #only accept inputs if loop is running
             self._logEvent(key,'up')
-            #self.writeCoordinateList()
         pass
+
+    def _writeKeyEventList(self):
+        if self._writeLocation:
+            with open(self._writeLocation, 'wb') as f:
+                pickle.dump(self._keyEventList,f)
+        else:
+            with open('test.txt', 'wb') as f:
+                pickle.dump(self._keyEventList,f)
 
     def run(self):
         PyKeyboardEvent.run(self)

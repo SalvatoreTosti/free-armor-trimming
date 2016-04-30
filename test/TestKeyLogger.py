@@ -22,7 +22,7 @@ class TestKeyLogger(unittest.TestCase):
 
     def test_initial_coordinateLocation(self):
         kl = KeyLogger("")
-        self.assertEqual([],kl.keyPressList)
+        self.assertEqual([],kl._keyEventList)
 
 if __name__ == '__main__':
     unittest.main()
