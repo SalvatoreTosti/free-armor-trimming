@@ -39,7 +39,7 @@ class ClickLogger(PyMouseEvent):
         self._coordinateList = value
 
     def elapsedTime(self):
-        elapsedTime = time.time() - self._lastEventTime
+        elapsedTime = time.time() - self._startTime
         self._lastEventTime = time.time()
         return elapsedTime
 
