@@ -62,8 +62,10 @@ class ClickPlayer(PyMouse):
         assert isinstance(y,Number), "y is non-numeric, %r" % y
         return time,x,y
 
-    def processEvent(self, waitTime, x, y):
-        time.sleep(waitTime)
+    def processEvent(self, eventTime, x, y):
+        nextTime = self._startTime + eventTime
+        while(time.time() < nextTime):
+            time.sleep(.001)
         self.click(x,y)
 
     def getNextEvent(self):
@@ -77,6 +79,7 @@ class ClickPlayer(PyMouse):
 
     def play(self):
         self.readCoordinateList()
+        self._startTime =  time.time()
         while self._eventQueue:
             self.getNextEvent()
 
@@ -89,14 +92,10 @@ class ClickPlayer(PyMouse):
                         self.addEvent(item)
             except EOFError:
                 print str("Attempted to read invalid file: " + self._readLocation)
-
         else:
-            with open('test.txt','rb') as f:
-                rawList = pickle.load(f)
-                for item in rawList:
-                    self.addEvent(item)
+            pass #if no read location do nothing
 
-    def printCoordinateList(self):
-        clickList = list(self._eventQueue)
-        for click in clickList:
-            print click
+    def printEventList(self):
+        eventList = list(self._eventQueue)
+        for event in eventList:
+            print event

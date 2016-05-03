@@ -64,8 +64,10 @@ class KeyPlayer(PyKeyboard):
         assert isinstance(eventType,str), "eventType is not a string, %r" % eventType
         return time,key,eventType
 
-    def _processEvent(self, waitTime, key, eventType):
-        time.sleep(waitTime)
+    def _processEvent(self, eventTime, key, eventType):
+        nextTime = self._startTime + eventTime
+        while(time.time() < nextTime):
+            time.sleep(.001)
         if(eventType == 'down'):
             self._key_down(key)
         elif(eventType == 'up'):
@@ -84,6 +86,7 @@ class KeyPlayer(PyKeyboard):
 
     def play(self):
         self._readKeyList()
+        self._startTime =  time.time()
         while self._eventQueue:
             self._getNextEvent()
 
