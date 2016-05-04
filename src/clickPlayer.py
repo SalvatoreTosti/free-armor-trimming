@@ -9,7 +9,7 @@ class ClickPlayer(PyMouse):
         PyMouse.__init__(self)
         self._readLocation = readLocation
         self._eventQueue = deque()
-        self.readCoordinateList()
+        self._readCoordinateList()
 
     @property
     def readLocation(self):
@@ -32,18 +32,18 @@ class ClickPlayer(PyMouse):
     def click(self, x, y, button=1, n=1):
         PyMouse.click(self,x,y,button,n)
 
-    def unpackEvent(self, event):
+    def _unpackEvent(self, event):
         if event:
             if isinstance(event,dict):
-                return self.unpackEventDict(event)
+                return self._unpackEventDict(event)
             elif isinstance(event,list):
-                return self.unpackEventList(event)
+                return self._unpackEventList(event)
             else:
-                return self.unpackEventList(event)
+                return self._unpackEventList(event)
         else:
             return None
 
-    def unpackEventDict(self, event):
+    def _unpackEventDict(self, event):
         time = event['time']
         x = event['x']
         y = event['y']
@@ -52,7 +52,7 @@ class ClickPlayer(PyMouse):
         assert isinstance(y,Number), "y is non-numeric, %r" % y
         return time,x,y
 
-    def unpackEventList(self, event):
+    def _unpackEventList(self, event):
         time = event[0]
         coordinates = event[1]
         x = coordinates[0]
@@ -62,34 +62,34 @@ class ClickPlayer(PyMouse):
         assert isinstance(y,Number), "y is non-numeric, %r" % y
         return time,x,y
 
-    def processEvent(self, eventTime, x, y):
+    def _processEvent(self, eventTime, x, y):
         nextTime = self._startTime + eventTime
         while(time.time() < nextTime):
             time.sleep(.001)
         self.click(x,y)
 
-    def getNextEvent(self):
+    def _getNextEvent(self):
         if self._eventQueue:
             event = self._eventQueue.popleft()
-            time,x,y = self.unpackEvent(event)
-            self.processEvent(time,x,y)
+            time,x,y = self._unpackEvent(event)
+            self._processEvent(time,x,y)
 
-    def addEvent(self, event):
+    def _addEvent(self, event):
         self._eventQueue.append(event)
 
     def play(self):
-        self.readCoordinateList()
+        self._readCoordinateList()
         self._startTime =  time.time()
         while self._eventQueue:
-            self.getNextEvent()
+            self._getNextEvent()
 
-    def readCoordinateList(self):
+    def _readCoordinateList(self):
         if self._readLocation:
             try:
                 with open(self._readLocation,'rb') as f:
                     rawList = pickle.load(f)
                     for item in rawList:
-                        self.addEvent(item)
+                        self._addEvent(item)
             except EOFError:
                 print str("Attempted to read invalid file: " + self._readLocation)
         else:

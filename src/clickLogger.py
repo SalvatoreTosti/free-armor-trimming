@@ -38,7 +38,7 @@ class ClickLogger(PyMouseEvent):
     def coordinateList(self, value):
         self._coordinateList = value
 
-    def elapsedTime(self):
+    def _elapsedTime(self):
         elapsedTime = time.time() - self._startTime
         self._lastEventTime = time.time()
         return elapsedTime
@@ -50,12 +50,12 @@ class ClickLogger(PyMouseEvent):
 
     def click(self, x, y, button, press):
         coordinates = [x,y]
-        time = self.elapsedTime()
+        time = self._elapsedTime()
         coordinatesAndTime = [time, coordinates]
         self._coordinateList.append(coordinatesAndTime)
-        self.writeCoordinateList()
+        self._writeCoordinateList()
 
-    def writeCoordinateList(self):
+    def _writeCoordinateList(self):
         if self._writeLocation:
             with open(self._writeLocation, 'wb') as f:
                 pickle.dump(self._coordinateList,f)
