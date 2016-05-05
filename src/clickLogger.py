@@ -1,6 +1,7 @@
 from pymouse import PyMouseEvent
 import time
 import pickle
+import csv
 
 class ClickLogger(PyMouseEvent):
     def __init__(self,wLocation):
@@ -58,7 +59,14 @@ class ClickLogger(PyMouseEvent):
     def _writeCoordinateList(self):
         if self._writeLocation:
             with open(self._writeLocation, 'wb') as f:
-                pickle.dump(self._coordinateList,f)
+                for event in self._coordinateList:
+                    eventWriter = csv.writer(f, delimiter=',',
+                                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
+                    time = event[0]
+                    coordinates = event[1]
+                    x = coordinates[0]
+                    y = coordinates[1]
+                eventWriter.writerow([time,x,y])
         else:
             with open('test.txt', 'wb') as f:
                 pickle.dump(self._coordinateList,f)

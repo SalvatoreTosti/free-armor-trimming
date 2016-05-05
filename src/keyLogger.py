@@ -1,7 +1,7 @@
 from pykeyboard import PyKeyboardEvent
-
 import time
 import pickle
+import csv
 
 #OSX keys
 key_code_translate_table = {
@@ -109,7 +109,7 @@ class KeyLogger(PyKeyboardEvent):
     def keyEventList(self, value):
         self._keyEventList = value
 
-    def elapsedTime(self):
+    def _elapsedTime(self):
         elapsedTime = time.time() - self._startTime
         self._lastEventTime = time.time()
         return elapsedTime
@@ -119,7 +119,7 @@ class KeyLogger(PyKeyboardEvent):
         self._writeKeyEventList()
 
     def _logEvent(self,key,eventType):
-        time = self.elapsedTime()
+        time = self._elapsedTime()
         keyAndTime = [time,key_code_translate_table[key],eventType]
         self._keyEventList.append(keyAndTime)
 
@@ -139,7 +139,13 @@ class KeyLogger(PyKeyboardEvent):
     def _writeKeyEventList(self):
         if self._writeLocation:
             with open(self._writeLocation, 'wb') as f:
-                pickle.dump(self._keyEventList,f)
+                for event in self._keyEventList:
+                    eventWriter = csv.writer(f, delimiter=',',
+                                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
+                    time = event[0]
+                    key = event[1]
+                    eventType = event[2]
+                    eventWriter.writerow([time,key,eventType])
         else:
             with open('test.txt', 'wb') as f:
                 pickle.dump(self._keyEventList,f)
