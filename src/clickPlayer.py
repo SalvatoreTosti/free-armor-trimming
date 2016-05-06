@@ -3,6 +3,7 @@ from numbers import Number
 from collections import deque
 from pymouse import PyMouse
 import pickle
+import csv
 
 class ClickPlayer(PyMouse):
     def __init__(self, readLocation):
@@ -87,9 +88,11 @@ class ClickPlayer(PyMouse):
         if self._readLocation:
             try:
                 with open(self._readLocation,'rb') as f:
-                    rawList = pickle.load(f)
-                    for item in rawList:
-                        self._addEvent(item)
+                    reader = csv.reader(f, delimiter=',', quotechar='|')
+                    for row in reader:
+                        lst = list(row)
+                        event = [float(lst[0]),[float(lst[1]),float(lst[2])]]
+                        self._addEvent(event)
             except EOFError:
                 print str("Attempted to read invalid file: " + self._readLocation)
         else:

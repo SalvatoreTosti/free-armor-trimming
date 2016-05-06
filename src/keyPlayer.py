@@ -3,6 +3,7 @@ from numbers import Number
 from collections import deque
 from pykeyboard import PyKeyboard
 import pickle
+import csv
 
 class KeyPlayer(PyKeyboard):
     def __init__(self,readLocation):
@@ -94,9 +95,11 @@ class KeyPlayer(PyKeyboard):
         if self._readLocation:
             try:
                 with open(self._readLocation,'rb') as f:
-                    rawList = pickle.load(f)
-                    for item in rawList:
-                        self._addEvent(item)
+                        reader = csv.reader(f, delimiter=',', quotechar='|')
+                        for row in reader:
+                            lst = list(row)
+                            event = [float(lst[0]),lst[1],lst[2]]
+                            self._addEvent(event)
             except EOFError:
                 print str("Attempted to read invalid file: " + self._readLocation)
         else:
