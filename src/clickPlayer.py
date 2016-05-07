@@ -55,9 +55,8 @@ class ClickPlayer(PyMouse):
 
     def _unpackEventList(self, event):
         time = event[0]
-        coordinates = event[1]
-        x = coordinates[0]
-        y = coordinates[1]
+        x = event[1]
+        y = event[2]
         assert isinstance(time,Number), "time is non-numeric, %r" % time
         assert isinstance(x,Number), "x is non-numeric, %r" % x
         assert isinstance(y,Number), "y is non-numeric, %r" % y
@@ -91,7 +90,7 @@ class ClickPlayer(PyMouse):
                     reader = csv.reader(f, delimiter=',', quotechar='|')
                     for row in reader:
                         lst = list(row)
-                        event = [float(lst[0]),[float(lst[1]),float(lst[2])]]
+                        event = [float(lst[0]),float(lst[1]),float(lst[2])]
                         self._addEvent(event)
             except EOFError:
                 print str("Attempted to read invalid file: " + self._readLocation)
