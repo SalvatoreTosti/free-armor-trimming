@@ -54,18 +54,30 @@ class ClickLogger(PyMouseEvent):
         time = self._elapsedTime()
         coordinatesAndTime = [time, x, y]
         self._coordinateList.append(coordinatesAndTime)
-        self._writeCoordinateList()
 
     def _writeCoordinateList(self):
         if self._writeLocation:
             with open(self._writeLocation, 'wb') as f:
+                eventWriter = csv.writer(f, delimiter=',',
+                                            quotechar='|', quoting=csv.QUOTE_MINIMAL)
                 for event in self._coordinateList:
-                    eventWriter = csv.writer(f, delimiter=',',
-                                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
                     time = event[0]
                     x = event[1]
                     y = event[2]
-                eventWriter.writerow([time,x,y])
+                    eventWriter.writerow([time,x,y])
         else:
             with open('test.txt', 'wb') as f:
-                pickle.dump(self._coordinateList,f)
+                eventWriter = csv.writer(f, delimiter=',',
+                                            quotechar='|', quoting=csv.QUOTE_MINIMAL)
+                for event in self._coordinateList:
+                    time = event[0]
+                    x = event[1]
+                    y = event[2]
+                    eventWriter.writerow([time,x,y])
+
+    def run(self):
+        #inspired by this guide on python automation https://automatetheboringstuff.com/chapter18/
+        try:
+            PyMouseEvent.run(self)
+        except KeyboardInterrupt:
+            self._writeCoordinateList()
