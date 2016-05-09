@@ -139,16 +139,22 @@ class KeyLogger(PyKeyboardEvent):
     def _writeKeyEventList(self):
         if self._writeLocation:
             with open(self._writeLocation, 'wb') as f:
+                eventWriter = csv.writer(f, delimiter=',',
+                                            quotechar='|', quoting=csv.QUOTE_MINIMAL)
                 for event in self._keyEventList:
-                    eventWriter = csv.writer(f, delimiter=',',
-                                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
                     time = event[0]
                     key = event[1]
                     eventType = event[2]
                     eventWriter.writerow([time,key,eventType])
         else:
             with open('test.txt', 'wb') as f:
-                pickle.dump(self._keyEventList,f)
+                eventWriter = csv.writer(f, delimiter=',',
+                                            quotechar='|', quoting=csv.QUOTE_MINIMAL)
+                for event in self._keyEventList:
+                    time = event[0]
+                    key = event[1]
+                    eventType = event[2]
+                    eventWriter.writerow([time,key,eventType])
 
     def run(self):
         PyKeyboardEvent.run(self)
