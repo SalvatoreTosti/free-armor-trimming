@@ -64,7 +64,7 @@ class ClickLogger(PyMouseEvent):
                     time = event[0]
                     x = event[1]
                     y = event[2]
-                    eventWriter.writerow([time,x,y])
+                    eventWriter.writerow(["click",time,x,y])
         else:
             with open('test.txt', 'wb') as f:
                 eventWriter = csv.writer(f, delimiter=',',

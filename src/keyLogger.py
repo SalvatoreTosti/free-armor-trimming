@@ -145,7 +145,7 @@ class KeyLogger(PyKeyboardEvent):
                     time = event[0]
                     key = event[1]
                     eventType = event[2]
-                    eventWriter.writerow([time,key,eventType])
+                    eventWriter.writerow(["key",time,key,eventType])
         else:
             with open('test.txt', 'wb') as f:
                 eventWriter = csv.writer(f, delimiter=',',

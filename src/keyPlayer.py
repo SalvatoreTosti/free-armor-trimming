@@ -98,7 +98,7 @@ class KeyPlayer(PyKeyboard):
                         reader = csv.reader(f, delimiter=',', quotechar='|')
                         for row in reader:
                             lst = list(row)
-                            event = [float(lst[0]),lst[1],lst[2]]
+                            event = [float(lst[1]),lst[2],lst[3]]
                             self._addEvent(event)
             except EOFError:
                 print str("Attempted to read invalid file: " + self._readLocation)

@@ -90,7 +90,7 @@ class ClickPlayer(PyMouse):
                     reader = csv.reader(f, delimiter=',', quotechar='|')
                     for row in reader:
                         lst = list(row)
-                        event = [float(lst[0]),float(lst[1]),float(lst[2])]
+                        event = [float(lst[1]),float(lst[2]),float(lst[3])]
                         self._addEvent(event)
             except EOFError:
                 print str("Attempted to read invalid file: " + self._readLocation)
