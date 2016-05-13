@@ -45,9 +45,9 @@ class ClickPlayer(PyMouse):
             return None
 
     def _unpackEventDict(self, event):
-        time = event['time']
-        x = event['x']
-        y = event['y']
+        time = event["time"]
+        x = event["x"]
+        y = event["y"]
         assert isinstance(time,Number), "time is non-numeric, %r" % time
         assert isinstance(x,Number), "x is non-numeric, %r" % x
         assert isinstance(y,Number), "y is non-numeric, %r" % y
@@ -86,8 +86,8 @@ class ClickPlayer(PyMouse):
     def _readCoordinateList(self):
         if self._readLocation:
             try:
-                with open(self._readLocation,'rb') as f:
-                    reader = csv.reader(f, delimiter=',', quotechar='|')
+                with open(self._readLocation,"rb") as f:
+                    reader = csv.reader(f, delimiter=",", quotechar="|")
                     for row in reader:
                         lst = list(row)
                         event = [float(lst[1]),float(lst[2]),float(lst[3])]

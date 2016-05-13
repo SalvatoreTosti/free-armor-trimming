@@ -48,9 +48,9 @@ class KeyPlayer(PyKeyboard):
             return None
 
     def _unpackEventDict(self,event):
-        time = event['time']
-        key = event['key']
-        eventType = event['eventType']
+        time = event["time"]
+        key = event["key"]
+        eventType = event["eventType"]
         assert isinstance(time,Number), "time is non-numeric, %r" % time
         assert isinstance(key,str), "key is not a string, %r" % key
         assert isinstance(eventType,str), "eventType is not a string, %r" % eventType
@@ -69,12 +69,12 @@ class KeyPlayer(PyKeyboard):
         nextTime = self._startTime + eventTime
         while(time.time() < nextTime):
             time.sleep(.001)
-        if(eventType == 'down'):
+        if(eventType == "down"):
             self._key_down(key)
-        elif(eventType == 'up'):
+        elif(eventType == "up"):
             self._key_up(key)
         else:
-            raise ValueError('invalid eventType supplied.')
+            raise ValueError("invalid eventType supplied.")
 
     def _getNextEvent(self):
         if self._eventQueue:
@@ -94,8 +94,8 @@ class KeyPlayer(PyKeyboard):
     def _readKeyList(self):
         if self._readLocation:
             try:
-                with open(self._readLocation,'rb') as f:
-                        reader = csv.reader(f, delimiter=',', quotechar='|')
+                with open(self._readLocation,"rb") as f:
+                        reader = csv.reader(f, delimiter=",", quotechar="|")
                         for row in reader:
                             lst = list(row)
                             event = [float(lst[1]),lst[2],lst[3]]

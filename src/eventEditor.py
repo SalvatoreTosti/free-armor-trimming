@@ -59,8 +59,8 @@ class EventEditor(object):
     def _readCoordinateList(self,readLocation):
         if readLocation:
             try:
-                with open(readLocation,'rb') as f:
-                    reader = csv.reader(f,delimiter=',', quotechar='|')
+                with open(readLocation,"rb") as f:
+                    reader = csv.reader(f,delimiter=",", quotechar="|")
                     for row in reader:
                         lst = list(row)
                         event = [float(lst[0]),float(lst[1]),float(lst[2])]
@@ -73,8 +73,8 @@ class EventEditor(object):
     def _readKeyList(self,readLocation):
         if readLocation:
             try:
-                with open(readLocation,'rb') as f:
-                        reader = csv.reader(f, delimiter=',', quotechar='|')
+                with open(readLocation,"rb") as f:
+                        reader = csv.reader(f, delimiter=",", quotechar="|")
                         for row in reader:
                             lst = list(row)
                             event = [float(lst[0]),lst[1],lst[2]]

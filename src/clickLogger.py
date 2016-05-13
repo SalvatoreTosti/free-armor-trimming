@@ -57,18 +57,18 @@ class ClickLogger(PyMouseEvent):
 
     def _writeCoordinateList(self):
         if self._writeLocation:
-            with open(self._writeLocation, 'wb') as f:
-                eventWriter = csv.writer(f, delimiter=',',
-                                            quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            with open(self._writeLocation, "wb") as f:
+                eventWriter = csv.writer(f, delimiter=",",
+                                            quotechar="|", quoting=csv.QUOTE_MINIMAL)
                 for event in self._coordinateList:
                     time = event[0]
                     x = event[1]
                     y = event[2]
                     eventWriter.writerow(["click",time,x,y])
         else:
-            with open('test.txt', 'wb') as f:
-                eventWriter = csv.writer(f, delimiter=',',
-                                            quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            with open("test.txt", "wb") as f:
+                eventWriter = csv.writer(f, delimiter=",",
+                                            quotechar="|", quoting=csv.QUOTE_MINIMAL)
                 for event in self._coordinateList:
                     time = event[0]
                     x = event[1]
