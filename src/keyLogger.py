@@ -118,9 +118,9 @@ class KeyLogger(PyKeyboardEvent):
         self.state = False #set listener loop to end
         self._writeKeyEventList()
 
-    def _logEvent(self,key,eventType):
+    def _logEvent(self,key,keyType):
         time = self._elapsedTime()
-        keyAndTime = [time,key_code_translate_table[key],eventType]
+        keyAndTime = [time,key_code_translate_table[key],keyType]
         self._keyEventList.append(keyAndTime)
 
     def key_press(self,key):
@@ -144,8 +144,8 @@ class KeyLogger(PyKeyboardEvent):
                 for event in self._keyEventList:
                     time = event[0]
                     key = event[1]
-                    eventType = event[2]
-                    eventWriter.writerow(["key",time,key,eventType])
+                    keyType = event[2]
+                    eventWriter.writerow(["key",time,key,keyType])
         else:
             with open("test.txt", "wb") as f:
                 eventWriter = csv.writer(f, delimiter=",",
@@ -153,8 +153,8 @@ class KeyLogger(PyKeyboardEvent):
                 for event in self._keyEventList:
                     time = event[0]
                     key = event[1]
-                    eventType = event[2]
-                    eventWriter.writerow([time,key,eventType])
+                    keyType = event[2]
+                    eventWriter.writerow([time,key,keyType])
 
     def run(self):
         PyKeyboardEvent.run(self)
