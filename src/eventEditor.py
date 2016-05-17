@@ -6,7 +6,7 @@ class EventEditor(object):
         object.__init__(self)
         self._readLocation = readLocation
         self._eventList = []
-        self._readCoordinateList(self._readLocation)
+        self._readEventList(self._readLocation)
 
     @property
     def readLocation(self):
@@ -51,34 +51,24 @@ class EventEditor(object):
         event = self._eventList.pop(oldPosition)
         self._eventList.insert(newPosition, event)
 
-    def printCoordinateList(self):
+    def printEventList(self):
         for item in self._eventList:
             print item
         print ""
 
-    def _readCoordinateList(self,readLocation):
+    def _readEventList(self,readLocation):
         if readLocation:
             try:
                 with open(readLocation,"rb") as f:
-                    reader = csv.reader(f,delimiter=",", quotechar="|")
+                    reader = csv.reader(f,delimiter=",",quotechar="|")
                     for row in reader:
                         lst = list(row)
-                        event = [float(lst[0]),float(lst[1]),float(lst[2])]
+                        eventType = lst[0]
+                        if eventType == "key":
+                            event = [float(lst[1]),lst[2],lst[3]]
+                        else:
+                            event = [float(lst[1]),float(lst[2]),float(lst[3])]
                         self._addEvent(event)
-            except EOFError:
-                print str("Attempted to read invalid file: " + readLocation)
-        else:
-            pass #if no read location do nothing
-
-    def _readKeyList(self,readLocation):
-        if readLocation:
-            try:
-                with open(readLocation,"rb") as f:
-                        reader = csv.reader(f, delimiter=",", quotechar="|")
-                        for row in reader:
-                            lst = list(row)
-                            event = [float(lst[0]),lst[1],lst[2]]
-                            self._addEvent(event)
             except EOFError:
                 print str("Attempted to read invalid file: " + readLocation)
         else:

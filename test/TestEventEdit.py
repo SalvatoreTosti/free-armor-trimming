@@ -106,5 +106,17 @@ class TestClickPlayer(unittest.TestCase):
         ed._moveEvent(2,2)
         self.assertEqual(["a","b","c"],ed._eventList)
 
+    def test_readEventList_Bad_Location(self):
+        with self.assertRaises(IOError) as cm:
+            ed = EventEditor("doesnt-exist.txt")
+            ed._readEventList(ed.readLocation)
+        self.assertEqual('[Errno 2] No such file or directory: \'doesnt-exist.txt\'',str(cm.exception))
+
+    def test_readEventList_Bad_Location(self):
+        with self.assertRaises(IOError) as cm:
+            ed = EventEditor("doesnt-exist.txt")
+            ed._readEventList(ed.readLocation)
+        self.assertEqual('[Errno 2] No such file or directory: \'doesnt-exist.txt\'',str(cm.exception))
+
 if __name__ == '__main__':
     unittest.main()
