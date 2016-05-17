@@ -47,6 +47,18 @@ class EventEditor(object):
         x = event[1]
         return [time,x,newY]
 
+    def _changeKey(self,newKey,event):
+        assert isinstance(newKey,basestring), "newKey is non-string, %r" % newKey
+        time = event[0]
+        keyType = event[2]
+        return [time,newKey,keyType]
+
+    def _changeKeyType(self,newKeyType,event):
+        assert isinstance(newKeyType,basestring), "newKeytype is non-string, %r" % newKeyType
+        time = event[0]
+        key = event[1]
+        return [time,key,newKeyType]
+
     def _moveEvent(self, oldPosition, newPosition):
         event = self._eventList.pop(oldPosition)
         self._eventList.insert(newPosition, event)
