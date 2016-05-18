@@ -6,7 +6,7 @@ import argparse
 import os
 
 class MODE:
-    EXIT,ASK,EDIT,RECORD_CLICK,PLAY_CLICK,RECORD_MOUSE,PLAY_MOUSE = range(1,8)
+    EXIT,ASK,EDIT,RECORD_CLICK,PLAY_CLICK,RECORD_KEY,PLAY_KEY = range(1,8)
 
 class FAT(object):
     def __init__(self):
@@ -26,17 +26,18 @@ class FAT(object):
             elif(mode == MODE.RECORD_CLICK):
                 self.launchClickLogger()
                 mode = MODE.ASK
+            elif(mode == MODE.PLAY_CLICK):
+                self.launchClickPlayer()
+                mode = MODE.ASK
+            elif(mode == MODE.RECORD_KEY):
                 pass
-            elif(mode == MODE.RECORD_MOUSE):
-                pass
-            elif(mode == MODE.PLAY_MOUSE):
+            elif(mode == MODE.PLAY_KEY):
                 pass
             else:
                 return
 
 
     def promptForCommand(self):
-        print ""
         userInput = raw_input("Enter an execution mode: ").lower()
         if(userInput == "exit"):
             return MODE.EXIT
@@ -47,9 +48,9 @@ class FAT(object):
         elif(userInput == "play click"):
             return MODE.PLAY_CLICK
         elif(userInput == "record key"):
-            return MODE.RECORD_CLICK
-        elif(userInput == "play click"):
-            return MODE.PLAY_CLICK
+            return MODE.RECORD_KEY
+        elif(userInput == "play key"):
+            return MODE.PLAY_KEY
         else:
             return MODE.ASK
 
@@ -65,9 +66,13 @@ class FAT(object):
         clickLogger = ClickLogger(args)
         clickLogger.run()
 
+    def launchClickPlayer(self):
+        filename = self.promptForFile()
+        self.initClickPlayer(filename)
+
     def initClickPlayer(self, args):
         clickPlayer = ClickPlayer(args)
-        clickPlayer.printCoordinateList()
+        clickPlayer.play()
 
 if __name__ == '__main__':
     FAT().main()
