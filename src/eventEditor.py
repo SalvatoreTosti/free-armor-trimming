@@ -66,7 +66,12 @@ class EventEditor(object):
     def printEventList(self):
         for item in self._eventList:
             print item
-        print ""
+
+    def printNumberedEventList(self):
+        row = 0
+        for item in self._eventList:
+            print str(row) + " " + str(item)
+            row += 1
 
     def _readEventList(self,readLocation):
         if readLocation:
