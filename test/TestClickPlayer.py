@@ -12,8 +12,8 @@ class TestClickPlayer(unittest.TestCase):
         self.assertEqual(deque(),cp.eventQueue)
 
     def test_initial_readLocation_None(self):
-            cp = ClickPlayer(None)
-            self.assertEqual(None,cp.readLocation)
+        cp = ClickPlayer(None)
+        self.assertEqual(None,cp.readLocation)
 
     def test_initial_readLocation(self):
         cp = ClickPlayer("")

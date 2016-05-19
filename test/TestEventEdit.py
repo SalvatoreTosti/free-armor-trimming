@@ -84,6 +84,18 @@ class TestClickPlayer(unittest.TestCase):
         newEvent = ed._changeEventY(2,[0,200,300])
         self.assertEqual([0,200,2],newEvent)
 
+    def test_moveEvent_Bad_Location_High(self):
+        ed = EventEditor("")
+        ed.eventList =["a","b","c"]
+        ed._moveEvent(1,5)
+        self.assertEqual(["a","c","b"],ed.eventList)
+
+    def test_moveEvent_Bad_Location_Low(self):
+        ed = EventEditor("")
+        ed.eventList =["a","b","c"]
+        ed._moveEvent(1,-5)
+        self.assertEqual(["b","a","c"],ed.eventList)
+
     def test_moveEvent(self):
         ed = EventEditor("")
         ed.eventList =["a","b","c"]
