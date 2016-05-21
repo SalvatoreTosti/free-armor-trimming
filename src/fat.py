@@ -26,27 +26,27 @@ class FAT(object):
             if( mode == MODE.EXIT ):
                 running = False #stop looping
             if( mode == MODE.ASK ):
-                mode = self.promptForCommand()
+                mode = self._promptForEditorCommand()
             elif( mode == MODE.EDIT ):
-                self.launchEventEditor()
+                self._launchEventEditor()
                 mode = MODE.ASK
             elif( mode == MODE.RECORD_CLICK ):
-                self.launchClickLogger()
+                self._launchClickLogger()
                 mode = MODE.ASK
             elif( mode == MODE.PLAY_CLICK ):
-                self.launchClickPlayer()
+                self._launchClickPlayer()
                 mode = MODE.ASK
             elif( mode == MODE.RECORD_KEY ):
-                self.launchKeyLogger()
+                self._launchKeyLogger()
                 mode = MODE.ASK
             elif( mode == MODE.PLAY_KEY ):
-                self.launchKeyPlayer()
+                self._launchKeyPlayer()
                 mode = MODE.ASK
             else:
                 return
 
 
-    def promptForCommand(self):
+    def _promptForEditorCommand(self):
         userInput = raw_input("Enter an execution mode: ").lower()
         if( userInput == "exit" ):
             return MODE.EXIT
@@ -63,41 +63,35 @@ class FAT(object):
         else:
             return MODE.ASK
 
-    def promptForFile(self):
+    def _promptForFile(self):
         userInput = raw_input("Enter a file name: ")
         return userInput
 
-    def launchClickLogger(self):
-        filename = self.promptForFile()
-        self._initClickLogger(filename)
-
-    def _initClickLogger(self, args):
-        clickLogger = ClickLogger(args)
+    def _launchClickLogger(self):
+        filename = self._promptForFile()
+        clickLogger = ClickLogger(filename)
         clickLogger.run()
 
-    def launchClickPlayer(self):
-        filename = self.promptForFile()
-        self._initClickPlayer(filename)
-
-    def _initClickPlayer(self, args):
-        clickPlayer = ClickPlayer(args)
+    def _launchClickPlayer(self):
+        filename = self._promptForFile()
+        clickPlayer = ClickPlayer(filename)
         clickPlayer.play()
 
-    def launchKeyLogger(self):
-        filename = self.promptForFile()
+    def _launchKeyLogger(self):
+        filename = self._promptForFile()
         keyLogger = KeyLogger(filename)
         keyLogger.run()
 
-    def launchKeyPlayer(self):
-        filename = self.promptForFile()
+    def _launchKeyPlayer(self):
+        filename = self._promptForFile()
         keyPlayer = KeyPlayer(filename)
         keyPlayer.play()
 
-    def launchEventEditor(self):
-        filename = self.promptForFile()
-        self._initEventEditor(filename)
+    def _launchEventEditor(self):
+        filename = self._promptForFile()
+        self._runEventEditor(filename)
 
-    def _initEventEditor(self, args):
+    def _runEventEditor(self, args):
         eventEditor = EventEditor(args)
         editing = True
         editorMode = EDITOR_MODE.EDITOR_ASK
@@ -106,7 +100,7 @@ class FAT(object):
             if( editorMode == EDITOR_MODE.EDITOR_EXIT ):
                 editing = False #leave editor mode loop
             elif( editorMode == EDITOR_MODE.EDITOR_ASK ):
-                editorMode = self.promptForEditorCommand()
+                editorMode = self._promptForEditorCommand()
                 pass
             elif( editorMode == EDITOR_MODE.EDITOR_LIST ):
                 eventEditor.printNumberedEventList()
@@ -120,7 +114,7 @@ class FAT(object):
             else:
                 return
 
-    def promptForEditorCommand(self):
+    def _promptForEditorCommand(self):
         userInput = raw_input("Enter an editor mode: ").lower()
         if( userInput == "exit" ):
             return EDITOR_MODE.EDITOR_EXIT
@@ -133,7 +127,7 @@ class FAT(object):
         else:
             return EDITOR_MODE.EDITOR_ASK
 
-    def promptForOldPosition(self):
+    def _promptForOldPosition(self):
         userInput = raw_input("Enter a Number: ").lower()
         return userInput
 
