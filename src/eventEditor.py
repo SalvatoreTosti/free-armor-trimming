@@ -31,33 +31,28 @@ class EventEditor(object):
 
     def _changeEventTime(self,newTime,event):
         assert isinstance(newTime,Number), "newTime is non-numeric, %r" % newTime
-        x = event[1]
-        y = event[2]
-        return [newTime,x,y]
+        event["time"] = newTime
+        return event
 
     def _changeEventX(self,newX,event):
         assert isinstance(newX,Number), "newX is non-numeric, %r" % newX
-        time = event[0]
-        y = event[2]
-        return [time,newX,y]
+        event["x"] = newX
+        return event
 
     def _changeEventY(self,newY,event):
         assert isinstance(newY,Number), "newY is non-numeric, %r" % newY
-        time = event[0]
-        x = event[1]
-        return [time,x,newY]
+        event["y"] = newY
+        return event
 
     def _changeKey(self,newKey,event):
         assert isinstance(newKey,basestring), "newKey is non-string, %r" % newKey
-        time = event[0]
-        keyType = event[2]
-        return [time,newKey,keyType]
+        event["key"] = newKey
+        return event
 
     def _changeKeyType(self,newKeyType,event):
         assert isinstance(newKeyType,basestring), "newKeytype is non-string, %r" % newKeyType
-        time = event[0]
-        key = event[1]
-        return [time,key,newKeyType]
+        event["keyType"] = newKeyType
+        return event
 
     def _moveEvent(self, oldPosition, newPosition):
         event = self._eventList.pop(oldPosition)
@@ -82,9 +77,9 @@ class EventEditor(object):
                         lst = list(row)
                         eventType = lst[0]
                         if eventType == "key":
-                            event = [float(lst[1]),lst[2],lst[3]]
+                            event = { "eventType" : "key", "time" : float(lst[1]), "key" : lst[2], "keyType" : lst[3] }
                         else:
-                            event = [float(lst[1]),float(lst[2]),float(lst[3])]
+                            event = { "eventType" : "click", "time" : float(lst[1]), "x" : float(lst[2]), "y" : float(lst[3])}
                         self._addEvent(event)
             except EOFError:
                 print str("Attempted to read invalid file: " + readLocation)

@@ -47,8 +47,8 @@ class TestClickPlayer(unittest.TestCase):
 
     def test_ChangeEventTime(self):
         ed = EventEditor("")
-        newEvent = ed._changeEventTime(2,[0,200,300])
-        self.assertEqual([2,200,300],newEvent)
+        newEvent = ed._changeEventTime(2,{ "eventType" : "click" , "time" : 0, "x" : 200, "y" : 300 })
+        self.assertEqual({ "eventType" : "click" , "time" : 2, "x" : 200, "y" : 300 },newEvent)
 
     def test_changeEventX_Non_Numeric(self):
         with self.assertRaises(AssertionError) as cm:
@@ -64,8 +64,8 @@ class TestClickPlayer(unittest.TestCase):
 
     def test_changeEventX(self):
         ed = EventEditor("")
-        newEvent = ed._changeEventX(2,[0,200,300])
-        self.assertEqual([0,2,300],newEvent)
+        newEvent = ed._changeEventX(2,{ "eventType" : "click" , "time" : 0, "x" : 200, "y" : 300 })
+        self.assertEqual({ "eventType" : "click" , "time" : 0, "x" : 2, "y" : 300 },newEvent)
 
     def test_changeEventY_Non_Numeric(self):
         with self.assertRaises(AssertionError) as cm:
@@ -81,8 +81,8 @@ class TestClickPlayer(unittest.TestCase):
 
     def test_changeEventY(self):
         ed = EventEditor("")
-        newEvent = ed._changeEventY(2,[0,200,300])
-        self.assertEqual([0,200,2],newEvent)
+        newEvent = ed._changeEventY(2,{ "eventType" : "click" , "time" : 0, "x" : 200 , "y" : 300 })
+        self.assertEqual({ "eventType" : "click" , "time" : 0, "x" : 200 , "y" : 2 },newEvent)
 
     def test_moveEvent_Bad_Location_High(self):
         ed = EventEditor("")
