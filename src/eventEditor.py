@@ -85,3 +85,15 @@ class EventEditor(object):
                 print str("Attempted to read invalid file: " + readLocation)
         else:
             pass #if no read location do nothing
+
+    def _writeEventList(self,writeLocation):
+        if writeLocation:
+            with open(writeLocation, "wb") as f:
+                eventWriter = csv.writer(f, delimiter=",", quotechar="|", quoting=csv.QUOTE_MINIMAL)
+                for event in self._eventList:
+                        if(event["eventType"] == "click"):
+                            eventWriter.writerow([event["eventType"], event["time"],
+                            event["x"],event["y"]])
+                        elif(event["eventType"] == "key"):
+                            eventWriter.writerow([event["eventType"], event["time"],
+                            event["key"], event["keyType"]])
