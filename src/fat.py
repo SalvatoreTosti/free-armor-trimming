@@ -12,7 +12,7 @@ class MODE:
     EXIT, ASK, EDIT, RECORD_CLICK, PLAY_CLICK, RECORD_KEY, PLAY_KEY = range(1,8)
 
 class EDITOR_MODE:
-    EDITOR_EXIT, EDITOR_ASK, EDITOR_LIST, EDITOR_MOVE, EDITOR_CHANGE_TIME = range(1,6)
+    EDITOR_EXIT, EDITOR_ASK, EDITOR_LIST, EDITOR_MOVE, EDITOR_CHANGE_TIME, EDITOR_SAVE = range(1,7)
 
 class FAT(object):
     def __init__(self):
@@ -26,7 +26,7 @@ class FAT(object):
             if( mode == MODE.EXIT ):
                 running = False #stop looping
             if( mode == MODE.ASK ):
-                mode = self._promptForEditorCommand()
+                mode = self._promptForCommand()
             elif( mode == MODE.EDIT ):
                 self._launchEventEditor()
                 mode = MODE.ASK
@@ -46,7 +46,7 @@ class FAT(object):
                 return
 
 
-    def _promptForEditorCommand(self):
+    def _promptForCommand(self):
         userInput = raw_input("Enter an execution mode: ").lower()
         if( userInput == "exit" ):
             return MODE.EXIT
@@ -101,16 +101,20 @@ class FAT(object):
                 editing = False #leave editor mode loop
             elif( editorMode == EDITOR_MODE.EDITOR_ASK ):
                 editorMode = self._promptForEditorCommand()
-                pass
             elif( editorMode == EDITOR_MODE.EDITOR_LIST ):
                 eventEditor.printNumberedEventList()
                 editorMode = EDITOR_MODE.EDITOR_ASK
-                pass
             elif( editorMode == EDITOR_MODE.EDITOR_MOVE ):
-                oldPosition = self.promptForNumber()
-                pass
+                oldPosition = self._promptForNumber()
+                newPosition = self._promptForNumber()
+                eventEditor._moveEvent(int(oldPosition),int(newPosition))
+                editorMode = EDITOR_MODE.EDITOR_ASK
             elif( editorMode == EDITOR_MODE.EDITOR_CHANGE_TIME ):
+                editorMode = EDITOR_MODE.EDITOR_ASK
                 pass
+            elif( editorMode == EDITOR_MODE.EDITOR_SAVE):
+                eventEditor.writeEventList(eventEditor.readLocation)
+                editorMode = EDITOR_MODE.EDITOR_ASK
             else:
                 return
 
@@ -124,13 +128,14 @@ class FAT(object):
             return EDITOR_MODE.EDITOR_MOVE
         elif( userInput == "change time" ):
             return EDITOR_MODE.EDITOR_CHANGE_TIME
+        elif( userInput == "save" ):
+            return EDITOR_MODE.EDITOR_SAVE
         else:
             return EDITOR_MODE.EDITOR_ASK
 
-    def _promptForOldPosition(self):
+    def _promptForNumber(self):
         userInput = raw_input("Enter a Number: ").lower()
         return userInput
-
 
 if __name__ == '__main__':
     FAT().main()

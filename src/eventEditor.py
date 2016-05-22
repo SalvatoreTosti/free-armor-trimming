@@ -86,7 +86,7 @@ class EventEditor(object):
         else:
             pass #if no read location do nothing
 
-    def _writeEventList(self,writeLocation):
+    def writeEventList(self,writeLocation):
         if writeLocation:
             with open(writeLocation, "wb") as f:
                 eventWriter = csv.writer(f, delimiter=",", quotechar="|", quoting=csv.QUOTE_MINIMAL)
