@@ -1,4 +1,5 @@
 from numbers import Number
+from operator import itemgetter
 import csv
 
 class EventEditor(object):
@@ -61,6 +62,13 @@ class EventEditor(object):
     def printEventList(self):
         for item in self._eventList:
             print item
+
+    def eventsInOrder(self):
+        sortedList = sorted(self._eventList, key=itemgetter("time"))
+        return self._eventList == sortedList
+
+    def sortListByTime(self):
+        self._eventList = sorted(self._eventList, key=itemgetter("time"))
 
     def printNumberedEventList(self):
         row = 0
