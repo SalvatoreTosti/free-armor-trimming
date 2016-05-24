@@ -113,7 +113,7 @@ class FAT(object):
                 editorMode = EDITOR_MODE.EDITOR_ASK
                 pass
             elif( editorMode == EDITOR_MODE.EDITOR_SAVE):
-                eventEditor.writeEventList(eventEditor.readLocation)
+                self._edtiorSaveHelpers(eventEditor)
                 editorMode = EDITOR_MODE.EDITOR_ASK
             else:
                 return
@@ -133,9 +133,29 @@ class FAT(object):
         else:
             return EDITOR_MODE.EDITOR_ASK
 
+    def _edtiorSaveHelpers(self, eventEditor):
+            if(eventEditor.eventsInOrder()):
+                eventEditor.writeEventList(eventEditor.readLocation)
+            else:
+                reorder = self._promptYN("Events are not ordered chronologically, reorder events? (Y/N)")
+                if(reorder):
+                    eventEditor.sortListByTime()
+                    eventEditor.writeEventList(eventEditor.readLocation)
+
+
     def _promptForNumber(self):
         userInput = raw_input("Enter a Number: ").lower()
         return userInput
+
+    def _promptYN(self, prompt):
+        while True:
+            userInput = raw_input(prompt).lower()
+            if(userInput == 'y' or userInput == 'yes'):
+                return True
+            elif(userInput == 'n' or userInput == 'no'):
+                return False
+            else:
+                pass #do nothing continue looping
 
 if __name__ == '__main__':
     FAT().main()
