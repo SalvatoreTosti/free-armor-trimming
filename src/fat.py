@@ -88,8 +88,13 @@ class FAT(object):
         keyPlayer.play()
 
     def _launchEventEditor(self):
-        filename = self._promptForFile()
-        self._runEventEditor(filename)
+        while True:
+            userInput = self._promptForFile()
+            if(os.path.isfile(userInput)):
+                self._runEventEditor(userInput)
+                return
+            elif(userInput == "exit"):
+                return
 
     def _runEventEditor(self, args):
         eventEditor = EventEditor(args)
@@ -139,15 +144,14 @@ class FAT(object):
             return EDITOR_MODE.EDITOR_ASK
 
     def _editorSaveHelpers(self, eventEditor):
-            if(eventEditor.eventsInOrder()):
-                eventEditor.writeEventList(eventEditor.readLocation)
-            else:
+            if(not eventEditor.eventsInOrder()):
                 reorder = self._promptYN("Events are not ordered chronologically, reorder events? (Y/N)")
                 if(reorder):
                     eventEditor.sortListByTime()
-                    eventEditor.writeEventList(eventEditor.readLocation)
-                else:
-                    eventEditor.writeEventList(eventEditor.readLocation)
+            try:
+                eventEdtior.writeEventList(eventEditor.readLocaion)
+            except IOError:
+                print "Unable to open file"
 
     def _editorChangeTimeHelper(self,eventEditor):
         editPosition = self._promptForNumber()
