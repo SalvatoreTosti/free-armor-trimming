@@ -12,7 +12,7 @@ class MODE:
     EXIT, ASK, EDIT, RECORD_CLICK, PLAY_CLICK, RECORD_KEY, PLAY_KEY = range(1,8)
 
 class EDITOR_MODE:
-    EDITOR_EXIT, EDITOR_ASK, EDITOR_LIST, EDITOR_MOVE, EDITOR_CHANGE_TIME, EDITOR_SAVE = range(1,7)
+    EDITOR_EXIT, EDITOR_ASK, EDITOR_LIST, EDITOR_MOVE, EDITOR_CHANGE_TIME, EDITOR_CHANGE_EVENT, EDITOR_SAVE = range(1,8)
 
 class FAT(object):
     def __init__(self):
@@ -110,10 +110,13 @@ class FAT(object):
                 eventEditor._moveEvent(int(oldPosition),int(newPosition))
                 editorMode = EDITOR_MODE.EDITOR_ASK
             elif( editorMode == EDITOR_MODE.EDITOR_CHANGE_TIME ):
+                self._editorChangeTimeHelper(eventEditor)
                 editorMode = EDITOR_MODE.EDITOR_ASK
                 pass
+            elif( editorMode == EDITOR_MODE.EDITOR_CHANGE_EVENT ):
+                pass
             elif( editorMode == EDITOR_MODE.EDITOR_SAVE):
-                self._edtiorSaveHelpers(eventEditor)
+                self._editorSaveHelpers(eventEditor)
                 editorMode = EDITOR_MODE.EDITOR_ASK
             else:
                 return
@@ -128,12 +131,14 @@ class FAT(object):
             return EDITOR_MODE.EDITOR_MOVE
         elif( userInput == "change time" ):
             return EDITOR_MODE.EDITOR_CHANGE_TIME
+        elif( userInput == "change event"):
+            return EDITOR_MODE.EDITOR_CHANGE_Event
         elif( userInput == "save" ):
             return EDITOR_MODE.EDITOR_SAVE
         else:
             return EDITOR_MODE.EDITOR_ASK
 
-    def _edtiorSaveHelpers(self, eventEditor):
+    def _editorSaveHelpers(self, eventEditor):
             if(eventEditor.eventsInOrder()):
                 eventEditor.writeEventList(eventEditor.readLocation)
             else:
@@ -141,7 +146,23 @@ class FAT(object):
                 if(reorder):
                     eventEditor.sortListByTime()
                     eventEditor.writeEventList(eventEditor.readLocation)
+                else:
+                    eventEditor.writeEventList(eventEditor.readLocation)
 
+    def _editorChangeTimeHelper(self,eventEditor):
+        editPosition = self._promptForNumber()
+        event = None
+        try:
+            event = eventEditor.getEvent(int(editPosition))
+        except IndexError:
+            print "Number outside of valid range."
+            return
+        newTime = self._promptForNumber()
+        #try:
+        newEvent = eventEditor._changeEventTime(float(newTime),event)
+        #except Exception:
+            #pass
+        eventEditor.setEvent(int(editPosition),newEvent)
 
     def _promptForNumber(self):
         userInput = raw_input("Enter a Number: ").lower()

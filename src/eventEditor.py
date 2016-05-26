@@ -30,10 +30,22 @@ class EventEditor(object):
     def _addEvent(self, event):
         self._eventList.append(event)
 
+    def getEvent(self, position):
+        return self._eventList[position]
+
+    def setEvent(self, position, event):
+        self._eventList[position] = event
+
     def _changeEventTime(self,newTime,event):
         assert isinstance(newTime,Number), "newTime is non-numeric, %r" % newTime
         event["time"] = newTime
         return event
+
+    # def changeEventTime(self,position,newTime):
+    #     assert isinstance(position,Number), "position is non-numeric, %r" % position
+    #     assert isinstance(newTime,Number), "newTime is non-numeric, %r" % newTime
+    #     event = self._getEvent(position)
+    #     event["time"] = newTime
 
     def _changeEventX(self,newX,event):
         assert isinstance(newX,Number), "newX is non-numeric, %r" % newX
