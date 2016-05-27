@@ -161,11 +161,16 @@ class FAT(object):
         except IndexError:
             print "Number outside of valid range."
             return
+        except ValueError:
+            print "Invalid input, please enter a number."
+            return
+            
         newTime = self._promptForNumber()
-        #try:
-        newEvent = eventEditor._changeEventTime(float(newTime),event)
-        #except Exception:
-            #pass
+        try:
+            newEvent = eventEditor._changeEventTime(float(newTime),event)
+        except ValueError:
+            print "Invalid input, please enter a number."
+            return
         eventEditor.setEvent(int(editPosition),newEvent)
 
     def _promptForNumber(self):
