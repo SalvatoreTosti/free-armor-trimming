@@ -1,4 +1,6 @@
-#Command line interface for clickLogger and clickPlayer classes.
+#Command line interface for ClickLogger and ClickPlayer classes.
+from numbers import Number
+
 from clickLogger import ClickLogger
 from clickPlayer import ClickPlayer
 from keyLogger import KeyLogger
@@ -110,8 +112,8 @@ class FAT(object):
                 eventEditor.printNumberedEventList()
                 editorMode = EDITOR_MODE.EDITOR_ASK
             elif( editorMode == EDITOR_MODE.EDITOR_MOVE ):
-                oldPosition = self._promptForNumber()
-                newPosition = self._promptForNumber()
+                oldPosition = self._promptForNumber("Select index which will move: ")
+                newPosition = self._promptForNumber("Select destination index: ")
                 eventEditor._moveEvent(int(oldPosition),int(newPosition))
                 editorMode = EDITOR_MODE.EDITOR_ASK
             elif( editorMode == EDITOR_MODE.EDITOR_CHANGE_TIME ):
@@ -154,7 +156,7 @@ class FAT(object):
                 print "Unable to open file"
 
     def _editorChangeTimeHelper(self,eventEditor):
-        editPosition = self._promptForNumber()
+        editPosition = self._promptForNumber("Select index: ")
         event = None
         try:
             event = eventEditor.getEvent(int(editPosition))
@@ -164,8 +166,8 @@ class FAT(object):
         except ValueError:
             print "Invalid input, please enter a number."
             return
-            
-        newTime = self._promptForNumber()
+
+        newTime = self._promptForNumber("Enter a new time value: ")
         try:
             newEvent = eventEditor._changeEventTime(float(newTime),event)
         except ValueError:
@@ -173,9 +175,26 @@ class FAT(object):
             return
         eventEditor.setEvent(int(editPosition),newEvent)
 
-    def _promptForNumber(self):
-        userInput = raw_input("Enter a Number: ").lower()
-        return userInput
+    def _promptForNumber(self, prompt):
+        while True:
+            userInput = raw_input(prompt)
+            try:
+                number = float(userInput)
+                return userInput
+            except ValueError:
+                pass
+
+    def _promptForNumberEscapable(self, prompt, escapePhrase):
+        while True:
+            userInput = raw_input(prompt)
+            if(userInput == escapePhrase):
+                return None
+            else:
+                try:
+                    number = float(userInput)
+                    return userInput
+                except ValueError:
+                    pass
 
     def _promptYN(self, prompt):
         while True:
