@@ -119,9 +119,9 @@ class FAT(object):
             elif( editorMode == EDITOR_MODE.EDITOR_CHANGE_TIME ):
                 self._editorChangeTimeHelper(eventEditor)
                 editorMode = EDITOR_MODE.EDITOR_ASK
-                pass
             elif( editorMode == EDITOR_MODE.EDITOR_CHANGE_EVENT ):
-                pass
+                self._editorChangeEventHelper(eventEditor)
+                editorMode = EDITOR_MODE.EDITOR_ASK
             elif( editorMode == EDITOR_MODE.EDITOR_SAVE):
                 self._editorSaveHelpers(eventEditor)
                 editorMode = EDITOR_MODE.EDITOR_ASK
@@ -139,21 +139,21 @@ class FAT(object):
         elif( userInput == "change time" ):
             return EDITOR_MODE.EDITOR_CHANGE_TIME
         elif( userInput == "change event"):
-            return EDITOR_MODE.EDITOR_CHANGE_Event
+            return EDITOR_MODE.EDITOR_CHANGE_EVENT
         elif( userInput == "save" ):
             return EDITOR_MODE.EDITOR_SAVE
         else:
             return EDITOR_MODE.EDITOR_ASK
 
     def _editorSaveHelpers(self, eventEditor):
-            if(not eventEditor.eventsInOrder()):
-                reorder = self._promptYN("Events are not ordered chronologically, reorder events? (Y/N)")
-                if(reorder):
-                    eventEditor.sortListByTime()
-            try:
-                eventEdtior.writeEventList(eventEditor.readLocaion)
-            except IOError:
-                print "Unable to open file"
+        if(not eventEditor.eventsInOrder()):
+            reorder = self._promptYN("Events are not ordered chronologically, reorder events? (Y/N)")
+            if(reorder):
+                eventEditor.sortListByTime()
+        try:
+            eventEditor.writeEventList(eventEditor.readLocation)
+        except IOError:
+            print "Unable to open file"
 
     def _editorChangeTimeHelper(self,eventEditor):
         editPosition = self._promptForNumber("Select index: ")
@@ -174,6 +174,55 @@ class FAT(object):
             print "Invalid input, please enter a number."
             return
         eventEditor.setEvent(int(editPosition),newEvent)
+
+    def _editorChangeEventHelper(self,eventEditor):
+        editPosition = self._promptForNumber("Select index: ")
+        event = None
+        try:
+            event = eventEditor.getEvent(int(editPosition))
+        except IndexError:
+            print "Number outside of valid range."
+            return
+        except ValueError:
+            print "Invalid input, please enter a number."
+            return
+        if(event["eventType"] == "key"):
+            self._keyEditHelper(eventEditor,event)
+            pass
+        elif(event["eventType"] == "click"):
+            pass
+        else:
+            print "Unknown event type, " + event["eventType"]
+
+
+    def _keyEditHelper(self, eventEditor, event):
+        while True:
+            userInput = raw_input("Change key or key event type? (key / key event): ").lower()
+            if(userInput == "key"):
+                self._keyInputHelper(eventEditor, event)
+                return
+            elif(userInput == "key event"):
+                self._keyEventInputHelper(eventEditor, event)
+                return
+            else:
+                pass
+
+    def _keyInputHelper(self, eventEditor, event):
+        userInput = raw_input("Enter a new key: ").lower()
+        if(userInput.isalpha() and len(userInput) == 1):
+            eventEditor._changeKey(userInput, event)
+        else:
+            print "Invalid key entered."
+
+    def _keyEventInputHelper(self, eventEditor, event):
+        userInput = raw_input("Enter a new key event type (up / down): ").lower()
+        if(userInput == "up" or userInput == "down"):
+            eventEditor._changeKeyType(userInput,event)
+        else:
+            print "Invalid key type entered."
+
+    def _clickEditHelper(self):
+        return
 
     def _promptForNumber(self, prompt):
         while True:
