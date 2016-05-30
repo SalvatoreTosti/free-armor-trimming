@@ -187,9 +187,10 @@ class FAT(object):
             print "Invalid input, please enter a number."
             return
         if(event["eventType"] == "key"):
-            self._keyEditHelper(eventEditor,event)
+            self._keyEditHelper(eventEditor, event)
             pass
         elif(event["eventType"] == "click"):
+            self._clickEditHelper(eventEditor, event)
             pass
         else:
             print "Unknown event type, " + event["eventType"]
@@ -221,8 +222,26 @@ class FAT(object):
         else:
             print "Invalid key type entered."
 
-    def _clickEditHelper(self):
+    def _clickEditHelper(self, eventEditor, event):
+        while True:
+            userInput = raw_input("Change click X or Y? (X / Y): ").lower()
+            if(userInput == "x"):
+                self._clickInputHelperX(eventEditor, event)
+                return
+            elif(userInput == "y"):
+                self._clickInputHelperY(eventEditor, event)
+                return
+            else:
+                pass
         return
+
+    def _clickInputHelperX(self, eventEditor, event):
+        userInput = self._promptForNumber("Enter a new X coordinate: ")
+        eventEditor._changeEventX(float(userInput), event)
+
+    def _clickInputHelperY(self, eventEditor, event):
+        userInput = self._promptForNumber("Enter a new Y coordinate: ")
+        eventEditor._changeEventY(float(userInput), event)
 
     def _promptForNumber(self, prompt):
         while True:
