@@ -79,5 +79,19 @@ class TestClickPlayer(unittest.TestCase):
 
         self.assertEqual(dq,cp.eventQueue)
 
+    def test_loadEventList(self):
+        lst = []
+        lst.append("a")
+        lst.append("b")
+        lst.append("c")
+        cp = ClickPlayer("")
+        cp.loadEventList(lst)
+
+        self.assertEqual(len(cp.eventQueue), 3)
+        self.assertEqual(cp.eventQueue.pop(), "c")
+        self.assertEqual(cp.eventQueue.pop(), "b")
+        self.assertEqual(cp.eventQueue.pop(), "a")
+
+
 if __name__ == '__main__':
     unittest.main()

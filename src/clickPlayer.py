@@ -6,6 +6,10 @@ import pickle
 import csv
 
 class ClickPlayer(PyMouse):
+    def __init__(self):
+        PyMouse.__init__(self)
+        self._eventQueue = deque()
+
     def __init__(self, readLocation):
         PyMouse.__init__(self)
         self._readLocation = readLocation
@@ -96,6 +100,9 @@ class ClickPlayer(PyMouse):
                 print str("Attempted to read invalid file: " + self._readLocation)
         else:
             pass #if no read location do nothing
+
+    def loadEventList(self, eventList):
+        self._eventQueue.extend(eventList)
 
     def printEventList(self):
         eventList = list(self._eventQueue)

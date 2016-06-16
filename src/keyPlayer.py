@@ -6,7 +6,11 @@ import pickle
 import csv
 
 class KeyPlayer(PyKeyboard):
-    def __init__(self,readLocation):
+    def __init__(self):
+        PyKeyboard.__init__(self)
+        self._eventQueue = deque()
+
+    def __init__(self, readLocation):
         PyKeyboard.__init__(self)
         self._readLocation = readLocation
         self._eventQueue = deque()
@@ -104,6 +108,9 @@ class KeyPlayer(PyKeyboard):
                 print str("Attempted to read invalid file: " + self._readLocation)
         else:
             pass #if no read location do nothing
+
+    def loadEventList(self, eventList):
+        self._eventQueue.extend(eventList)
 
     def printEventList(self):
         eventList = list(self._eventQueue)

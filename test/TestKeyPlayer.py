@@ -79,5 +79,19 @@ class TestKeyPlayer(unittest.TestCase):
 
         self.assertEqual(dq,kp.eventQueue)
 
+    def test_loadEventList(self):
+        lst = []
+        lst.append("a")
+        lst.append("b")
+        lst.append("c")
+        kp = KeyPlayer("")
+        kp.loadEventList(lst)
+
+        self.assertEqual(len(kp.eventQueue), 3)
+        self.assertEqual(kp.eventQueue.pop(), "c")
+        self.assertEqual(kp.eventQueue.pop(), "b")
+        self.assertEqual(kp.eventQueue.pop(), "a")
+
+
 if __name__ == '__main__':
     unittest.main()
