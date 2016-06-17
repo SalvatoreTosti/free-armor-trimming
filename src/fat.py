@@ -147,7 +147,7 @@ class FAT(object):
 
     def _editorSaveHelpers(self, eventEditor):
         if(not eventEditor.eventsInOrder()):
-            reorder = self._promptYN("Events are not ordered chronologically, reorder events? (Y/N)")
+            reorder = self._promptYN("Events are not ordered chronologically, reorder events? (Y / N)")
             if(reorder):
                 eventEditor.sortListByTime()
         try:
@@ -176,16 +176,7 @@ class FAT(object):
         eventEditor.setEvent(int(editPosition),newEvent)
 
     def _editorChangeEventHelper(self,eventEditor):
-        editPosition = self._promptForNumber("Select index: ")
-        event = None
-        try:
-            event = eventEditor.getEvent(int(editPosition))
-        except IndexError:
-            print "Number outside of valid range."
-            return
-        except ValueError:
-            print "Invalid input, please enter a number."
-            return
+        event = self._promptForEvent(eventEditor.eventList)
         if(event["eventType"] == "key"):
             self._keyEditHelper(eventEditor, event)
             pass
@@ -194,7 +185,6 @@ class FAT(object):
             pass
         else:
             print "Unknown event type, " + event["eventType"]
-
 
     def _keyEditHelper(self, eventEditor, event):
         while True:
@@ -226,22 +216,16 @@ class FAT(object):
         while True:
             userInput = raw_input("Change click X or Y? (X / Y): ").lower()
             if(userInput == "x"):
-                self._clickInputHelperX(eventEditor, event)
+                userInput = self._promptForNumber("Enter a new X coordinate: ")
+                eventEditor._changeEventX(float(userInput), event)
                 return
             elif(userInput == "y"):
-                self._clickInputHelperY(eventEditor, event)
+                userInput = self._promptForNumber("Enter a new Y coordinate: ")
+                eventEditor._changeEventY(float(userInput), event)
                 return
             else:
                 pass
         return
-
-    def _clickInputHelperX(self, eventEditor, event):
-        userInput = self._promptForNumber("Enter a new X coordinate: ")
-        eventEditor._changeEventX(float(userInput), event)
-
-    def _clickInputHelperY(self, eventEditor, event):
-        userInput = self._promptForNumber("Enter a new Y coordinate: ")
-        eventEditor._changeEventY(float(userInput), event)
 
     def _promptForNumber(self, prompt):
         while True:
@@ -273,6 +257,16 @@ class FAT(object):
                 return False
             else:
                 pass #do nothing continue looping
+
+    def _promptForEvent(self, lst):
+        while True:
+            index = self._promptForNumber("Select index: ")
+            try:
+                return lst[int(index)]
+            except IndexError:
+                print "Number outside of valid range."
+            except ValueError:
+                print "Invalid input, please enter a number."
 
 if __name__ == '__main__':
     FAT().main()
