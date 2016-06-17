@@ -6,11 +6,7 @@ import pickle
 import csv
 
 class ClickPlayer(PyMouse):
-    def __init__(self):
-        PyMouse.__init__(self)
-        self._eventQueue = deque()
-
-    def __init__(self, readLocation):
+    def __init__(self, readLocation=""):
         PyMouse.__init__(self)
         self._readLocation = readLocation
         self._eventQueue = deque()
@@ -82,6 +78,13 @@ class ClickPlayer(PyMouse):
         self._eventQueue.append(event)
 
     def play(self):
+        """Play existing events from eventQueue."""
+        self._startTime =  time.time()
+        while self._eventQueue:
+            self._getNextEvent()
+
+    def readPlay(self):
+        """Read from file then attempt to play contents."""
         self._readCoordinateList()
         self._startTime =  time.time()
         while self._eventQueue:

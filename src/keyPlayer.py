@@ -6,11 +6,7 @@ import pickle
 import csv
 
 class KeyPlayer(PyKeyboard):
-    def __init__(self):
-        PyKeyboard.__init__(self)
-        self._eventQueue = deque()
-
-    def __init__(self, readLocation):
+    def __init__(self, readLocation=""):
         PyKeyboard.__init__(self)
         self._readLocation = readLocation
         self._eventQueue = deque()
@@ -54,42 +50,49 @@ class KeyPlayer(PyKeyboard):
     def _unpackEventDict(self,event):
         time = event["time"]
         key = event["key"]
-        eventType = event["eventType"]
+        keyType = event["keyType"]
         assert isinstance(time,Number), "time is non-numeric, %r" % time
         assert isinstance(key,str), "key is not a string, %r" % key
-        assert isinstance(eventType,str), "eventType is not a string, %r" % eventType
-        return time,key,eventType
+        assert isinstance(keyType,str), "keyType is not a string, %r" % keyType
+        return time,key,keyType
 
     def _unpackEventList(self, event):
         time = event[0]
         key = event[1]
-        eventType = event[2]
+        keyType = event[2]
         assert isinstance(time,Number), "time is non-numeric, %r" % time
         assert isinstance(key,str), "key is not a string, %r" % key
-        assert isinstance(eventType,str), "eventType is not a string, %r" % eventType
-        return time,key,eventType
+        assert isinstance(keyType,str), "keyType is not a string, %r" % keyType
+        return time,key,keyType
 
-    def _processEvent(self, eventTime, key, eventType):
+    def _processEvent(self, eventTime, key, keyType):
         nextTime = self._startTime + eventTime
         while(time.time() < nextTime):
             time.sleep(.001)
-        if(eventType == "down"):
+        if(keyType == "down"):
             self._key_down(key)
-        elif(eventType == "up"):
+        elif(keyType == "up"):
             self._key_up(key)
         else:
-            raise ValueError("invalid eventType supplied.")
+            raise ValueError("invalid keyType supplied, " + str(keyType))
 
     def _getNextEvent(self):
         if self._eventQueue:
             event = self._eventQueue.popleft()
-            time,key,eventType = self._unpackEvent(event)
-            self._processEvent(time,key,eventType)
+            time,key,keyType = self._unpackEvent(event)
+            self._processEvent(time,key,keyType)
 
     def _addEvent(self,event):
         self._eventQueue.append(event)
 
     def play(self):
+        """Play existing events from eventQueue."""
+        self._startTime =  time.time()
+        while self._eventQueue:
+            self._getNextEvent()
+
+    def readPlay(self):
+        """Read from file then attempt to play contents."""
         self._readKeyList()
         self._startTime =  time.time()
         while self._eventQueue:
